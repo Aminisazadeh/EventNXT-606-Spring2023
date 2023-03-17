@@ -144,4 +144,10 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+  
+  # resources :products do
+  #   collection {post :import}
+  # end
+  
+  #root to: 'products#index'
 end
