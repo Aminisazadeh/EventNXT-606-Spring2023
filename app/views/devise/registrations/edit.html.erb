@@ -1,85 +1,73 @@
-<br><br><br><br>
-<style>
-  body {
-   
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(https://www.teahub.io/photos/full/197-1977791_portland-wallpapers-hd-portland-oregon-city-view.jpg);
-    background-repeat: no-repeat; 
-    background-position: center;
-    background-attachment: fixed; 
-    webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    height:100%;
-    width:100%; 
-    
-  }
 
-  input, select, textarea{
-    color: white;
-  }
 
-  .field {
-    color: white;
-  }
 
-  h1, h2, h3, p{
-    color: white;
-  }
 
-  i {
-    text-align: "center";
-    font-size: 12px;
-  }
+<%# ================================================= %> 
+<%# following section is commented by "AMIN ISAZADEH" %>
 
-</style>
 
-<body>
-<div style="text-align: center">
 <h2>Edit <%= resource_name.to_s.humanize %></h2>
-
-<br>
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
+  
+  <%# *************************************************************************** %> 
+  <%# this section is added to include first_name and last_name in registeration" %>
+  
   <div class="field">
-    <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Email", class:"btn btn-transparent btn-rounded", style:"border: 2px solid white; border-radius: 5px; color: white;" %>
+    <%= f.label :first_name %><br />
+    <%= f.text_field :first_name %>
+  </div>
+  <div class="field">
+    <%= f.label :last_name %><br />
+    <%= f.text_field :last_name %>
+  </div>
+  
+  <%# above section is commented by "AMIN ISAZADEH" %>
+  <%# ********************************************* %>  
+  
+  
+  
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
   </div>
 
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
     <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
   <% end %>
 
-  <br><br>
   <div class="field">
-    <%= f.password_field :password, autocomplete: "new-password", placeholder:"New Password", class:"btn btn-transparent btn-rounded", style:"border: 2px solid white; border-radius: 5px; color: white;" %><br>
-    <% if @minimum_password_length < 6 %>
+    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+    <%= f.password_field :password, autocomplete: "new-password" %>
+    <% if @minimum_password_length %>
       <br />
       <em><%= @minimum_password_length %> characters minimum</em>
     <% end %>
   </div>
-  <br>
+
   <div class="field">
-    <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder:"Confirm New Password", class:"btn btn-transparent btn-rounded", style:"border: 2px solid white; border-radius: 5px; color: white;" %>
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
 
-  <br><br>
   <div class="field">
-    <%= f.password_field :current_password, autocomplete: "current-password", placeholder: "Current Password", class:"btn btn-transparent btn-rounded", style:"border: 2px solid white; border-radius: 5px; color: white;" %>
+    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+    <%= f.password_field :current_password, autocomplete: "current-password" %>
   </div>
 
-  <br>
   <div class="actions">
-    <%= f.submit "Update", class:"btn btn-transparent btn-rounded", style:"border: 2px solid white; border-radius: 5px; color: white;" %>
+    <%= f.submit "Update" %>
   </div>
 <% end %>
 
-<br><br>
-<h3>Unhappy? Don't worry, no hard feelings.</h3>
-<br>
-<%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, class:"btn btn-transparent btn-rounded", style:"border: 2px solid white; border-radius: 5px; color: white;" %>
-<br>
-<%= link_to "Back", :back, class:"btn btn-transparent btn-rounded", style:"border: 2px solid white; border-radius: 5px; color: white;" %>
-</div>
-</body>
+<h3>Cancel my account</h3>
+
+<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
+
+<%= link_to "Back", :back %>
+
+
+<%# above section is commented by "AMIN ISAZADEH" %>
+<%# ================================================= %>

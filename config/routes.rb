@@ -5,14 +5,20 @@ Rails.application.routes.draw do
     skip_controllers :applications, :authorized_applications
   end
 
-  devise_for :users, path: '',
-    path_names: {
-      registration: 'register'
-    },
-    controllers: {
-      registrations: 'registrations'
-    },
-    defaults: {format: :json}
+
+  # ================================================= 
+  devise_for :users
+  # =================================================
+
+
+  # devise_for :users, path: '',
+  #   path_names: {
+  #     registration: 'register'
+  #   },
+  #   controllers: {
+  #     registrations: 'registrations'
+  #   },
+  #   defaults: {format: :json}
 
   root 'welcome#index'
   post '/login' => 'login#create'

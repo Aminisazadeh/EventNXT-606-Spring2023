@@ -9,12 +9,27 @@
   <script>window.process = { env: {} }</script>
 </head>
 <body>
-  <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+  
+  
+  <%= render "layouts/header"%>       <%# this line is added by "AMIN ISAZADEH" %>    
+  
+  
+  <%# ================================================= %> 
+  <%# following section is commented by "AMIN ISAZADEH" %>
+  
+  
+  <!--<iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>-->
 
-  <nav class="nav navbar navbar-expand-lg navbar-light justify-content-between" style="background-color: #e6ccff;">
-    <h1 class="title">EVENTNXT</h1>
-    <%= yield :nav %>
-  </nav>
+  <!--<nav class="nav navbar navbar-expand-lg navbar-light justify-content-between" style="background-color: #e6ccff;">-->
+  <!--  <h1 class="title">EVENTNXT</h1>-->
+  <!--  <%= yield :nav %>-->
+  <!--</nav>-->
+
+  
+  <%# above section is commented by "AMIN ISAZADEH" %>
+  <%# ================================================= %>
+
+
 
   
   <main class='d-flex m-auto flex-column w-75'>
