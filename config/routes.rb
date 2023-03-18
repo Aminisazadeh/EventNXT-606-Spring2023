@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'page000/index'
 
   resources :seats
   use_doorkeeper do
