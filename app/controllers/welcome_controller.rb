@@ -3,6 +3,6 @@ class WelcomeController < ApplicationController
     if params.has_key? :register
       @register = true
     end
-    render 'index'
+    #render 'index'         # AMIN ISAZDEH: I think this line is unnecessary.
   end
 end
