@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
 
   # ================================================= 
-  devise_for :users
+  devise_for :users, :sign_out_via => [ :get ]    # :sign_out_via => [ :get ] is added to fix the borken sign-out action after using "namespace users"
   # =================================================
 
 
