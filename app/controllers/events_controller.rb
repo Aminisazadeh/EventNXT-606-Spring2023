@@ -1,11 +1,16 @@
 class EventsController < ApplicationController
+  #before_action :set_event, only: [:show, :edit, :update, :destroy]   # added by AMIN ISAZADEH to associate event and user
+  before_action :authenticate_user!, except: [:index, :show]          # added by AMIN ISAZADEH to associate event and user
+  before_action :correct_user, only: [:edit, :update, :destroy]       # added by AMIN ISAZADEH to associate event and user
+
+  
   def index
-    #@events = Event.all
-    @events = Event.where(user_id: 64) # hardcoded needs to be as some type of param
+    @events = Event.all       # uncommented by AMIN ISAZADEH to associate event and user
+    #@events = Event.where(user_id: 64) # hardcoded needs to be as some type of param   # commented by AMIN ISAZADEH to associate event and user
   end
 
   def show
-    @event = Event.find(params[:id])
+    @event = Event.find(params[:id])         # commented by AMIN ISAZADEH to associate event and user
     @event_id = params[:id]
     @seats = Seat.where(event_id: params[:id])
     @guests = Guest.where(event_id: params[:id])
@@ -26,45 +31,149 @@ class EventsController < ApplicationController
   end
 
   def new
-    @event = Event.new
+    #@event = Event.new                 # commented by AMIN ISAZADEH to associate event and user
+    @event = current_user.events.build  # added by AMIN ISAZADEH to associate event and user
   end
+  
+  
+  
+  
+  # ========================================================= #
+  # Following function is commented by AMIN ISAZADEH #
+  
+  # def create
+  #   par = event_params.to_h
+  #   if doorkeeper_token
+  #     par[:user_id] = doorkeeper_token[:resource_owner_id]
+  #   else
+  #     par[:user_id] = warden.authenticate(scope: :public)
+  #   end
+  
+  #   #@event = Event.new(par)                          # commented by AMIN ISAZADEH to associate event and user
+  #   @event = current_user.events.build(event_params)  # added by AMIN ISAZADEH to associate event and user
+  
+  #   #render json: {event: event}
+  #   if @event.save
+  #     redirect_to @event
+  #   end
+  #   #render_valid(event)
+  # end
+  
+  # ========================================================= #
+  # ========================================================= #
 
+
+
+
+  # ========================================================= #
+  # Following function is created by AMIN ISAZADEH #
+  
   def create
-    par = event_params.to_h
-    if doorkeeper_token
-      par[:user_id] = doorkeeper_token[:resource_owner_id]
-    else
-      par[:user_id] = warden.authenticate(scope: :public)
-    end
-    @event = Event.new(par)
+    @event = current_user.events.build(event_params)
 
-    #render json: {event: event}
-    if @event.save
-      redirect_to @event
+    respond_to do |format|
+      if @event.save
+        format.html { redirect_to event_url(@event), notice: "Event was successfully created." }
+        format.json { render :show, status: :created, location: @event }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @event.errors, status: :unprocessable_entity }
+      end
     end
-    #render_valid(event)
   end
+  
+  # ========================================================= #
+  # ========================================================= #
+
+
 
   def edit
-    @event = Event.find(params[:id])
+    @event = Event.find(params[:id])   # commented by AMIN ISAZADEH to associate event and user
   end
+  
+  
+  
+  
+  
+  
+  # ========================================================= #
+  # Following function is commented by AMIN ISAZADEH #
+  
+  # def update
+  #   @event = Event.find(params[:id])
 
+  #   if @event.update(event_params)
+  #     redirect_to @event
+  #   else
+  #     render :edit
+  #   end
+  # end
+  
+  # ========================================================= #
+  # ========================================================= #
+  
+  
+  
+  # ========================================================= #
+  # Following function is created by AMIN ISAZADEH #
+  
   def update
-    @event = Event.find(params[:id])
-
-    if @event.update(event_params)
-      redirect_to @event
-    else
-      render :edit
+    respond_to do |format|
+      if @event.update(event_params)
+        format.html { redirect_to event_url(@event), notice: "Event was successfully updated." }
+        format.json { render :show, status: :ok, location: @event }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @event.errors, status: :unprocessable_entity }
+      end
     end
-  end
+  end  
+  
+  # ========================================================= #
+  # ========================================================= #
+  
+  
+  
+  
+  
+  # ========================================================= #
+  # Following function is commented by AMIN ISAZADEH #
+  
+  # def destroy
+  #   @event = Event.find(params[:id])
+  #   @event.destroy
 
+  #   redirect_to root_path
+  # end
+
+  # ========================================================= #
+  # ========================================================= #  
+  
+  
+  
+  
+  
+  
+  # ========================================================= #
+  # Following function is created by AMIN ISAZADEH #
+  
   def destroy
-    @event = Event.find(params[:id])
     @event.destroy
 
-    redirect_to root_path
+    respond_to do |format|
+      format.html { redirect_to events_url, notice: "Event was successfully destroyed." }
+      format.json { head :no_content }
+    end
   end
+  
+  # ========================================================= #
+  # ========================================================= #
+  
+  
+  
+  
+  
+  
 
   def import_new_spreadsheet
     if !params[:file]
@@ -89,11 +198,59 @@ class EventsController < ApplicationController
               .where(seats: {event_id: params[:event_id]})
     render json: res.to_json, except: [:id]
   end
+  
+  
+  
+  
+  
+  
+  
+  
+  # ========================================================= #
+  # Following function is added by AMIN ISAZADEH #
+  
+  def correct_user
+    @event = current_user.event.find_by(id: params[:id])
+    redirect_to events_path, notice: "Not Authorized To Edit This Event" if @event.nil?
+  end
+  
+  # ========================================================= #
+  # ========================================================= #
+
+
+
+  
+  
 
   private
+  
+  
+  
+  # ========================================================= #
+  # Following function is added by AMIN ISAZADEH #
+  
+  # Use callbacks to share common setup or constraints between actions.
+  
+  # def set_event
+  #   @event = Event.find(params[:user_id])
+  # end
+  
+  # ========================================================= #
+  # ========================================================= #
+  
+  
+  
+  
+  
+  
   def event_params
-    params.permit(:title, :address, :datetime, :image, :description, :last_modified, :box_office, :user_id, :token)
+    #params.permit(:title, :address, :datetime, :image, :description, :last_modified, :box_office, :user_id, :token)                  # commented by AMIN ISAZADEH
+    params.require(:event).permit(:title, :address, :datetime, :image, :description, :last_modified, :box_office, :user_id, :token)   # added by AMIN ISAZADEH
   end
+
+
+
+
 
   def render_valid(event)
     @event = event
